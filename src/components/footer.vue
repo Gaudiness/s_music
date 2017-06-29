@@ -1,8 +1,15 @@
 <template>
   <div class="s_footer">
+    <div class="s_current_music">
+      <img src="../views/images/list1.jpg" class="">
+      <div class="s_music_detail">
+        <div>动物世界动物世界动物世界动物世界</div>
+        <div>薛之谦</div>
+      </div>
+    </div>
     <div class="s_control">
       <span class="iconfont s-prev s_btn_small"></span>
-      <span class="iconfont s-puase s_btn_big"></span>
+      <span class="iconfont s_btn_big" @click="musicControl" :class="{ 's-go': suspend, 's-puase': !suspend }"></span>
       <span class="iconfont s-next s_btn_small"></span>
     </div>
     <div class="s_progress">
@@ -10,17 +17,20 @@
       <div class="s_time_progress">
         <div class="s_progress_contaier">
           <template v-for="item in currentSong.timeLong">
-            <div :style="{ width: currentSong.length }" :class="{ active: item <= currentSong.currentPoint }"></div>
+            <div @click="setTimeProgress(item)" :style="{ width: currentSong.length }" :class="{ active: item <= currentSong.currentPoint }"></div>
           </template>
         </div>
-        <div class="s_progress_btn" :style="{ left: currentSong.currentPosition }">
+        <div class="s_progress_btn" :style="{ left: currentSong.currentPosition }" @click="posDrag">
           <i></i>
           <span class="iconfont s-round"></span>
         </div>
       </div>
       <div class="s_time_total">{{currentSong.endTime}}</div>
     </div>
-    <div class="s_vol"></div>
+    <!-- <div class="s_vol">
+      <div class="s_vol_container"></div>
+      <div></div>
+    </div> -->
     <div class="s_round_type"></div>
     <audio></audio>
   </div>
@@ -34,12 +44,50 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'sfooter',
 
+  data(){
+    return{
+      interval: null
+    }
+  },
+
   props: ['musicList', 'currentSong', 'suspend' ],
 
   methods: {
     setCurrentSong(){
       this.$store.dispatch('setCurrentSong');
-    }
+    },
+
+    setTimeProgress(item){
+      this.$store.dispatch('setTimeProgress', item);
+    },
+
+    musicControl(){
+      var _this = this;
+      if(!this.interval){
+        this.interval = setInterval(function(){
+          _this.$store.dispatch('setCurntPos');
+          if(_this.currentSong.currentPoint >= _this.currentSong.timeLong){
+            clearInterval(_this.interval);
+            _this.interval = null;
+            _this.$store.dispatch('musicControl');
+          }
+        }, 1000);
+      }
+
+      if(!this.suspend){
+        clearInterval(this.interval);
+        this.interval = null;
+      }
+
+      this.$store.dispatch('musicControl');
+    },
+
+    posDrag(){
+      this.$store.dispatch('posDrag');
+    },
+
+
+
   },
 
   mounted (){
@@ -60,6 +108,7 @@ export default {
 	box-sizing: border-box;
 }
 
+.s_current_music,
 .s_control,
 .s_progress,
 .s_vol,
@@ -68,6 +117,41 @@ export default {
   height: 100%;
 }
 
+.s_current_music{
+  width: 200px;
+  overflow: hidden;
+  background-color: #191B1F;
+  border-right: 1px solid #23262C;
+  box-sizing: border-box;
+}
+
+.s_current_music > img,
+.s_current_music .s_music_detail{
+  float: left;
+}
+
+.s_current_music > img{
+  width: 45px;
+  height: 45px;
+  border: none;
+}
+
+.s_current_music .s_music_detail{
+  font-size: 12px;
+  color: white;
+  width: 154px;
+  padding: 5px 10px;
+  box-sizing: border-box;
+}
+
+.s_current_music .s_music_detail > div{
+  width: 135px;
+  line-height: 18px; 
+  text-align: left;
+  white-space:nowrap;
+  overflow:hidden; 
+  text-overflow:ellipsis;
+}
 
 .s_control{
   width: 200px;
@@ -129,7 +213,7 @@ export default {
   width: 400px;
   height: 4px;
   background-color: #454546;
-  border-radius: 3px;
+
 }
 
 .s_progress_btn{
@@ -137,6 +221,7 @@ export default {
   top: -7px;
   width: 13px;
   height: 13px;
+  cursor: pointer;
 }
 
 .s_progress .s_time_progress .s-round{
@@ -155,6 +240,7 @@ export default {
 }
 
 .s_progress_contaier{
+  border-radius: 3px;
   height: 100%;
   overflow: hidden;
 }

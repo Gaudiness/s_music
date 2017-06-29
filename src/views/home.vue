@@ -12,7 +12,7 @@
     	</div>
     </div>
     <div class="s_footer">
-    	<sfooter :currentSong="currentSong"></sfooter>
+    	<sfooter :currentSong="currentSong" :suspend="suspend"></sfooter>
     </div>
   </div>
 </template>
@@ -41,7 +41,7 @@ export default {
     menuList: 'menuList',
     musicList: 'musicList',
     currentSong: 'currentSong',
-    suspend: 'suspend',
+    suspend: 'suspend'
   }),
 
   methods: {
