@@ -1,5 +1,12 @@
 <template>
   <div class="s_footer">
+    
+    <div class="s_control">
+      <span class="iconfont s-prev s_btn_small"></span>
+      <span class="iconfont s_btn_big" @click="musicControl" :class="{ 's-go': suspend, 's-puase': !suspend }"></span>
+      <span class="iconfont s-next s_btn_small"></span>
+    </div>
+
     <div class="s_current_music">
       <img src="../views/images/list1.jpg" class="">
       <div class="s_music_detail">
@@ -7,11 +14,7 @@
         <div>薛之谦</div>
       </div>
     </div>
-    <div class="s_control">
-      <span class="iconfont s-prev s_btn_small"></span>
-      <span class="iconfont s_btn_big" @click="musicControl" :class="{ 's-go': suspend, 's-puase': !suspend }"></span>
-      <span class="iconfont s-next s_btn_small"></span>
-    </div>
+
     <div class="s_progress">
       <div class="s_time_current">{{currentSong.startTime}}</div>
       <div class="s_time_progress">
@@ -31,7 +34,12 @@
       <div class="s_vol_container"></div>
       <div></div>
     </div> -->
-    <div class="s_round_type"></div>
+    <div class="s_round_type">
+      <i class="iconfont s-one"></i>
+      <i class="iconfont s-list"></i>
+    </div>
+
+
     <audio></audio>
   </div>
 
@@ -120,8 +128,7 @@ export default {
 .s_current_music{
   width: 200px;
   overflow: hidden;
-  background-color: #191B1F;
-  border-right: 1px solid #23262C;
+  margin-right: 10px;
   box-sizing: border-box;
 }
 
@@ -139,7 +146,7 @@ export default {
 .s_current_music .s_music_detail{
   font-size: 12px;
   color: white;
-  width: 154px;
+  width: 155px;
   padding: 5px 10px;
   box-sizing: border-box;
 }
@@ -270,7 +277,22 @@ export default {
 }
 
 .s_round_type{
-  width: 50px;
- 
+  width: 90px;
+  color: #7B7B7C;
+  font-size: 28px;
+  overflow: hidden;
+}
+
+.s_round_type > i{
+  float: left;
+  display: block;
+  width: 30px;
+  height: 45px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.s_round_type > i:hover{
+  color: white;
 }
 </style>

@@ -90,7 +90,6 @@ const mutations = {
   },
 
   [types.SET_CURNT_POS](state){
-    console.log('running');
     let curS = state.currentSong;
     curS.currentPoint++;
   }
